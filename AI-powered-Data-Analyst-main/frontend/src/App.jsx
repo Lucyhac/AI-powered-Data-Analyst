@@ -18,7 +18,7 @@ import {
   Area,
 } from "recharts";
 
-const API_BASE = "http://127.0.0.1:8000";
+const API_BASE = "/api";
 
 const COLORS = [
   "#2563eb",
@@ -65,9 +65,10 @@ body,#root{
 }
 
 .logo{
-  font-size:22px;
+  font-size:24px;
   font-weight:700;
   margin-bottom:30px;
+  color:#60a5fa;
 }
 
 .nav-btn{
@@ -81,6 +82,7 @@ body,#root{
   cursor:pointer;
   text-align:left;
   font-weight:600;
+  transition:0.3s;
 }
 
 .nav-btn:hover{
@@ -99,7 +101,7 @@ body,#root{
 }
 
 .title{
-  font-size:30px;
+  font-size:32px;
   font-weight:700;
 }
 
@@ -126,15 +128,15 @@ body,#root{
 }
 
 .kpi-card{
-  background:linear-gradient(135deg,#1e3a8a,#2563eb);
   border-radius:18px;
   padding:20px;
+  color:white;
 }
 
 .kpi-title{
   font-size:13px;
-  color:#dbeafe;
   text-transform:uppercase;
+  opacity:0.9;
 }
 
 .kpi-value{
@@ -186,11 +188,28 @@ th{
   padding:16px;
   border-radius:14px;
   border-left:5px solid #2563eb;
+  margin-bottom:12px;
 }
 
 .loading{
   color:#94a3b8;
   margin-top:10px;
+}
+
+.section-title{
+  margin-bottom:14px;
+  font-size:20px;
+  font-weight:700;
+}
+
+@media(max-width:1000px){
+  .layout{
+    grid-template-columns:1fr;
+  }
+
+  .sidebar{
+    display:none;
+  }
 }
 `;
 
@@ -198,7 +217,7 @@ const KPI = ({ title, value, color }) => (
   <div
     className="kpi-card"
     style={{
-      background: `linear-gradient(135deg, ${color}, #111827)`,
+      background:`linear-gradient(135deg, ${color}, #111827)`
     }}
   >
     <div className="kpi-title">{title}</div>
@@ -212,7 +231,7 @@ export default function App() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    document.title = "AI Data Analyst Dashboard";
+    document.title = "AI Powered Data Analyst";
   }, []);
 
   const postForm = async (url) => {
@@ -231,7 +250,7 @@ export default function App() {
 
   const runAnalysis = async () => {
     if (!files.length) {
-      alert("Please upload a file");
+      alert("Please upload dataset");
       return;
     }
 
@@ -258,54 +277,67 @@ export default function App() {
       <style>{styles}</style>
 
       <div className="layout">
+
         <aside className="sidebar">
           <div className="logo">Insight360 AI</div>
 
-          <button className="nav-btn">Overview</button>
+          <button className="nav-btn">Dashboard</button>
           <button className="nav-btn">Analytics</button>
           <button className="nav-btn">AI Insights</button>
           <button className="nav-btn">Visualizations</button>
           <button className="nav-btn">Reports</button>
+          <button className="nav-btn">Settings</button>
         </aside>
 
         <main className="main">
+
           <div className="topbar">
             <div>
-              <div className="title">AI Powered Data Analyst</div>
+              <div className="title">
+                AI Powered Data Analyst
+              </div>
+
               <div className="subtitle">
-                Intelligent analytics dashboard with automated insights
+                Automated Business Intelligence Dashboard
               </div>
             </div>
           </div>
 
           <div className="card upload-box">
-            <h3>Upload Dataset</h3>
+            <div className="section-title">
+              Upload Dataset
+            </div>
 
             <input
               type="file"
               multiple
               accept=".csv,.xlsx,.xls"
-              onChange={(e) => setFiles(Array.from(e.target.files))}
+              onChange={(e) =>
+                setFiles(Array.from(e.target.files))
+              }
             />
 
-            <div style={{ marginTop: 16 }}>
+            <div style={{ marginTop:16 }}>
               <button
                 className="btn btn-primary"
                 onClick={runAnalysis}
                 disabled={loading}
               >
-                {loading ? "Analyzing..." : "Run AI Analysis"}
+                {loading
+                  ? "Analyzing..."
+                  : "Run AI Analysis"}
               </button>
             </div>
 
             {loading && (
               <div className="loading">
-                Processing dataset and generating insights...
+                AI is analyzing your dataset...
               </div>
             )}
           </div>
 
           <div className="grid kpi-grid">
+
             <KPI
               title="Total Rows"
               value={data?.kpis?.rows}
@@ -329,84 +361,133 @@ export default function App() {
               value={data?.numeric_cols?.length}
               color="#f59e0b"
             />
+
           </div>
 
           {data && (
             <>
-              <div className="grid" style={{ gridTemplateColumns: "2fr 1fr" }}>
+
+              <div
+                className="grid"
+                style={{
+                  gridTemplateColumns:"2fr 1fr"
+                }}
+              >
+
                 <div className="card">
-                  <h3>Dataset Preview</h3>
+                  <div className="section-title">
+                    Dataset Preview
+                  </div>
 
                   <div className="table-wrap">
+
                     <table>
+
                       <thead>
                         <tr>
                           {Object.keys(rows[0] || {}).map((col) => (
-                            <th key={col}>{col}</th>
+                            <th key={col}>
+                              {col}
+                            </th>
                           ))}
                         </tr>
                       </thead>
 
                       <tbody>
-                        {rows.slice(0, 20).map((row, idx) => (
+
+                        {rows.slice(0,20).map((row, idx) => (
                           <tr key={idx}>
+
                             {Object.keys(row).map((col) => (
                               <td key={col}>
                                 {String(row[col])}
                               </td>
                             ))}
+
                           </tr>
                         ))}
+
                       </tbody>
+
                     </table>
+
                   </div>
                 </div>
 
                 <div className="card">
-                  <h3>AI Insights</h3>
+
+                  <div className="section-title">
+                    AI Insights
+                  </div>
 
                   {(data.insights || []).map((insight, idx) => (
-                    <div key={idx} className="insight-card">
+                    <div
+                      key={idx}
+                      className="insight-card"
+                    >
                       {insight}
                     </div>
                   ))}
+
                 </div>
+
               </div>
 
               <div
                 className="grid"
                 style={{
                   gridTemplateColumns:
-                    "repeat(auto-fit,minmax(350px,1fr))",
+                    "repeat(auto-fit,minmax(350px,1fr))"
                 }}
               >
+
                 <div className="card">
-                  <h3>Statistical Overview</h3>
+
+                  <div className="section-title">
+                    Statistical Overview
+                  </div>
 
                   <ResponsiveContainer width="100%" height={300}>
+
                     <BarChart data={data.summary || []}>
+
                       <CartesianGrid strokeDasharray="3 3" />
+
                       <XAxis dataKey="column" />
+
                       <YAxis />
+
                       <Tooltip />
+
                       <Legend />
 
                       <Bar
                         dataKey="mean"
                         fill="#2563eb"
                       />
+
                     </BarChart>
+
                   </ResponsiveContainer>
+
                 </div>
 
                 <div className="card">
-                  <h3>Trend Analysis</h3>
+
+                  <div className="section-title">
+                    Trend Analysis
+                  </div>
 
                   <ResponsiveContainer width="100%" height={300}>
+
                     <LineChart data={data.summary || []}>
+
                       <CartesianGrid strokeDasharray="3 3" />
+
                       <XAxis dataKey="column" />
+
                       <YAxis />
+
                       <Tooltip />
 
                       <Line
@@ -415,15 +496,23 @@ export default function App() {
                         stroke="#10b981"
                         strokeWidth={3}
                       />
+
                     </LineChart>
+
                   </ResponsiveContainer>
+
                 </div>
 
                 <div className="card">
-                  <h3>Distribution Analysis</h3>
+
+                  <div className="section-title">
+                    Distribution Analysis
+                  </div>
 
                   <ResponsiveContainer width="100%" height={300}>
+
                     <PieChart>
+
                       <Pie
                         data={data.summary || []}
                         dataKey="mean"
@@ -431,27 +520,42 @@ export default function App() {
                         outerRadius={100}
                         label
                       >
+
                         {(data.summary || []).map((_, index) => (
                           <Cell
                             key={index}
-                            fill={COLORS[index % COLORS.length]}
+                            fill={
+                              COLORS[index % COLORS.length]
+                            }
                           />
                         ))}
+
                       </Pie>
 
                       <Tooltip />
+
                     </PieChart>
+
                   </ResponsiveContainer>
+
                 </div>
 
                 <div className="card">
-                  <h3>Area Analytics</h3>
+
+                  <div className="section-title">
+                    Area Analytics
+                  </div>
 
                   <ResponsiveContainer width="100%" height={300}>
+
                     <AreaChart data={data.summary || []}>
+
                       <CartesianGrid strokeDasharray="3 3" />
+
                       <XAxis dataKey="column" />
+
                       <YAxis />
+
                       <Tooltip />
 
                       <Area
@@ -460,13 +564,20 @@ export default function App() {
                         stroke="#8b5cf6"
                         fill="#8b5cf6"
                       />
+
                     </AreaChart>
+
                   </ResponsiveContainer>
+
                 </div>
+
               </div>
+
             </>
           )}
+
         </main>
+
       </div>
     </>
   );
