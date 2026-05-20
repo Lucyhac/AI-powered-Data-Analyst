@@ -1,0 +1,11 @@
+order_id,order_date,region,product,category,quantity,unit_price
+1001,2024-01-05,North,Widget A,Hardware,10,25.5
+1002,2024-01-06,South,Widget B,Hardware,5,32.0
+1003,2024-01-07,East,Gadget A,Electronics,8,45.0
+1004,2024-01-08,West,Gadget B,Electronics,3,55.0
+1005,2024-01-09,North,Widget A,Hardware,6,25.5
+1006,2024-01-10,South,Widget C,Hardware,12,28.0
+1007,2024-01-11,East,Gadget A,Electronics,7,45.0
+1008,2024-01-12,West,Gadget C,Electronics,4,52.0
+1009,2024-01-13,North,Widget B,Hardware,9,32.0
+1010,2024-01-14,South,Gadget B,Electronics,2,55.0
