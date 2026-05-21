@@ -11,7 +11,7 @@ from openpyxl.utils import get_column_letter
 
 logger = logging.getLogger(__name__)
 
-OUTPUT_DIR = Path("data/output")
+OUTPUT_DIR = Path("/tmp/data_analyst_output")
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 
