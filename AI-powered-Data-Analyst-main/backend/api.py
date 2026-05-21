@@ -389,3 +389,6 @@ async def download_clean(
             "attachment; filename=cleaned_data.csv"
         },
     )
+@app.get("/")
+def root():
+    return {"message": "API running"}
