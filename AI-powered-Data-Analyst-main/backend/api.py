@@ -13,11 +13,12 @@ from fastapi.responses import (
     StreamingResponse,
 )
 
+# TO:
+import sys, os
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from backend.data_processing import pipeline, column_profile
-from backend.reporting import (
-    create_charts,
-    generate_excel_report,
-)
+from backend.reporting import create_charts, generate_excel_report
 from utils.logger import setup_logger
 
 # ----------------------------
