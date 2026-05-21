@@ -1,3 +1,6 @@
+import matplotlib
+matplotlib.use("Agg")
+
 import io
 import logging
 from typing import Optional
