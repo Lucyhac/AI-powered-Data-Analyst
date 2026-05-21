@@ -3,6 +3,9 @@ matplotlib.use("Agg")
 
 import io
 import logging
+import sys
+import os
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from typing import Optional
 
 from fastapi import FastAPI, File, UploadFile, Form
