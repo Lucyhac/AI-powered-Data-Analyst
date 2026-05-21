@@ -2,8 +2,11 @@ fastapi
 uvicorn
 pandas
 numpy
+matplotlib
 openpyxl
 python-multipart
-matplotlib
-xlsxwriter
 scikit-learn
+scipy
+joblib
+xlsxwriter
+pillow
