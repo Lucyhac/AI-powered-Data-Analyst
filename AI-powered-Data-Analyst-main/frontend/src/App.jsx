@@ -18,7 +18,7 @@ import {
   Area,
 } from "recharts";
 
-const API_BASE = "";
+const API_BASE = "/api";
 
 const COLORS = [
   "#2563eb",
