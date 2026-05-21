@@ -44,11 +44,11 @@ app.add_middleware(
 def root():
     return {"message": "AI Powered Data Analyst API Running"}
 
-@app.get("/health")
+@app.get("/api/health")
 def health():
     return {"status": "ok"}
 
-@app.post("/analyze")
+@app.post("/api/analyze")
 async def analyze(
     files: list[UploadFile] = File(...),
     group_col: Optional[str] = Form(default=None),
@@ -80,7 +80,7 @@ async def analyze(
         logger.exception("Analysis failed")
         return JSONResponse(status_code=500, content={"error": str(exc)})
 
-@app.post("/report")
+@app.post("/api/report")
 async def report(
     files: list[UploadFile] = File(...),
     group_col: Optional[str] = Form(default=None),
@@ -94,7 +94,9 @@ async def report(
             buffers.append((content, f.filename))
         results = pipeline(buffers, group_col=group_col)
         charts = create_charts(results["data"], group_col, results["numeric_cols"])
-        report_path = generate_excel_report(results["data"], results["summary"], results["grouped"], charts, group_col)
+        report_path = generate_excel_report(
+            results["data"], results["summary"], results["grouped"], charts, group_col
+        )
         return FileResponse(
             report_path,
             media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -104,7 +106,7 @@ async def report(
         logger.exception("Report generation failed")
         return JSONResponse(status_code=500, content={"error": str(exc)})
 
-@app.post("/clean")
+@app.post("/api/clean")
 async def clean(
     files: list[UploadFile] = File(...),
     group_col: Optional[str] = Form(default=None),
@@ -125,7 +127,7 @@ async def clean(
         "datetime_cols": results["datetime_cols"],
     }
 
-@app.post("/column-stats")
+@app.post("/api/column-stats")
 async def column_stats(
     column: str = Form(...),
     files: list[UploadFile] = File(...),
@@ -139,7 +141,7 @@ async def column_stats(
     results = pipeline(buffers)
     return column_profile(results["data"], column)
 
-@app.post("/insights")
+@app.post("/api/insights")
 async def insights(files: list[UploadFile] = File(...)):
     if not files:
         return JSONResponse(status_code=400, content={"error": "No files uploaded"})
@@ -155,8 +157,12 @@ async def insights(files: list[UploadFile] = File(...)):
     recommendations = []
     if numeric_cols and not summary.empty:
         top_mean = summary.sort_values(by="mean", ascending=False).iloc[0]
-        insights_list.append(f"{top_mean['column']} has highest average value at {top_mean['mean']:.2f}")
-        recommendations.append(f"Focus on optimizing {top_mean['column']} for better performance.")
+        insights_list.append(
+            f"{top_mean['column']} has highest average value at {top_mean['mean']:.2f}"
+        )
+        recommendations.append(
+            f"Focus on optimizing {top_mean['column']} for better performance."
+        )
     if k.get("missing_count", 0) > 0:
         insights_list.append(f"{k['missing_count']} missing values detected and cleaned.")
         recommendations.append("Improve upstream data quality collection.")
@@ -168,7 +174,7 @@ async def insights(files: list[UploadFile] = File(...)):
         recommendations.append("Maintain current data governance standards.")
     return {"insights": insights_list[:5], "recommendations": recommendations[:5]}
 
-@app.post("/download-clean")
+@app.post("/api/download-clean")
 async def download_clean(files: list[UploadFile] = File(...)):
     if not files:
         return JSONResponse(status_code=400, content={"error": "No files uploaded"})
@@ -184,5 +190,4 @@ async def download_clean(files: list[UploadFile] = File(...)):
         headers={"Content-Disposition": "attachment; filename=cleaned_data.csv"},
     )
 
-# Required by Vercel
 handler = app
