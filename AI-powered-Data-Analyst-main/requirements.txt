@@ -6,7 +6,5 @@ matplotlib
 openpyxl
 python-multipart
 scikit-learn
-scipy
-joblib
 xlsxwriter
-pillow
+seaborn
