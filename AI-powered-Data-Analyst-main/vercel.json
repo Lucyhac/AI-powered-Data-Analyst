@@ -19,10 +19,11 @@
       "dest": "backend/api.py"
     },
     {
-      "handle": "filesystem"
+      "src": "/(.*)",
+      "dest": "/frontend/dist/$1"
     },
     {
-      "src": "/(.*)",
+      "src": "/",
       "dest": "/frontend/dist/index.html"
     }
   ]
